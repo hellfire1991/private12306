@@ -16,6 +16,7 @@
   安装chrome浏览器，并安装selenium chrome驱动，网上教程很多，请自行百度
   
 使用：
+
   1.在main.py文件内按模板格式填写好账户信息和需要购买的车票信息
   
       USER_DATA=[{"user_name":"hello","password":"xxxxxxxx"},]

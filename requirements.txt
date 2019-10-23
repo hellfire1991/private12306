@@ -6,7 +6,6 @@ tensorflow
 numpy>=1.14.6
 scipy>=1.1.0
 selenium
-base64
 cv2
-hashlib
-pathlib
+
+

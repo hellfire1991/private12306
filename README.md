@@ -1,11 +1,17 @@
 # pravite12306
 一个简单轻便的12306购票软件，代码少bug少，模块独立容易拓展
 安装：
+
   命令：git clone git@github.com:hellfire1991/pravite12306.git
+  
   进入项目目录：pravite12306
+  
   命令：pip install virtualenv
+  
   命令：virtualenv  env
+  
   命令：pip install -r requirements.txt
+  
   安装chrome浏览器，并安装selenium chrome驱动，网上教程很多，请自行百度
   
 使用：

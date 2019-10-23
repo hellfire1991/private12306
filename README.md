@@ -1,5 +1,6 @@
 # pravite12306
 一个简单轻便的12306购票软件，代码少bug少，模块独立容易拓展
+
 安装：
 
   命令：git clone git@github.com:hellfire1991/pravite12306.git

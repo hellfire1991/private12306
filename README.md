@@ -3,17 +3,21 @@
 
 安装：
 
-  命令：git clone git@github.com:hellfire1991/pravite12306.git
+  1.命令：git clone git@github.com:hellfire1991/pravite12306.git
   
-  进入项目目录：pravite12306
+  2.进入项目目录：pravite12306
   
-  命令：pip install virtualenv
+  3.命令：pip install virtualenv
   
-  命令：virtualenv  env
+  4.命令：virtualenv  env
+    
+  5.linux 进入 env/bin 目录后 命令： source activate        激活虚拟环境
   
-  命令：pip install -r requirements.txt
+    windows 进入 env/Script 文件夹后 命令 ：source activate        激活虚拟环境
   
-  安装chrome浏览器，并安装selenium chrome驱动，网上教程很多，请自行百度
+  6.命令：pip install -r requirements.txt
+  
+  7.安装chrome浏览器，并安装selenium chrome驱动，网上教程很多，请自行百度
   
 使用：
 
@@ -53,9 +57,11 @@
   2.命令：python main.py
   
 简介：
-在阅读了12306以及py12306两个项目后根据自身需求写了一个比较简洁程序。感谢各位老大哥，读代码学到很多
+在阅读了12306以及py12306两个项目后根据自身需求写了一个比较简洁的程序（功能简单，代码容易读，bug也少点）。感谢各位老大哥，读代码学到很多
 
 比较适合对python有一定了解，并且仅用来满足个人和朋友购票需求的同学
+
+使用request_html进行查询，selenium 登陆买票,减少12306网站修改cookie、url等一些操作带来的程序更新压力
 
 支持多用户，并且每个用户可以设置多个购票需求，支持多线程
 

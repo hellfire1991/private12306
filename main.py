@@ -8,7 +8,7 @@ USER_DATA=[{"user_name":"hellfire1991","password":"xxxxxxxx"},]
 #填写车票信息要注意严格按照模板填写，不然可能出现无法预测的bug
 QUERY_DATA={"hellfire1991":{
                             #乘车日期(必填)
-                            "train_date":["2019-10-23",],
+                            "train_date":["2019-10-28",],
 
                             #始发站2（必填）
                             "from_station":"杭州",

@@ -14,10 +14,14 @@
   5.linux 进入 env/bin 目录后 命令： source activate        激活虚拟环境
   
     windows 进入 env/Script 文件夹后 命令 ：source activate        激活虚拟环境
+
+  6.返回 private目录
+
+  7.命令：pip install -r requirements.txt
+
+    windows用户：pip install -r winrequirements.txt
   
-  6.命令：pip install -r requirements.txt
-  
-  7.安装chrome浏览器，并安装selenium chrome驱动，网上教程很多，请自行百度
+  8.安装chrome浏览器，并安装selenium chrome驱动，网上教程很多，请自行百度
   
 使用：
 
@@ -55,8 +59,11 @@
       
       
   2.命令：python main.py
-  
+
+注意：由于tensorflow 和 keres的兼容问题，程序会报警告，但不影响使用，如果觉得碍眼，适当降低他们的版本
+
 简介：
+
 在阅读了12306以及py12306两个项目后根据自身需求写了一个比较简洁的程序（功能简单，代码容易读，bug也少）。感谢各位老大哥，读代码学到很多
 
 比较适合对python有一定了解，并且仅用来满足个人和朋友购票需求的同学

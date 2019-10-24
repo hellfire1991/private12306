@@ -161,28 +161,28 @@ class FIND_TICKET(object):
 
 
 if __name__=="__main__":
-
-    query={
-                            #乘车日期
-                            "train_date":["2019-10-25",],
-                            #始发站2
-                            "from_station":"杭州",
-                            #到达站
-                            "to_station":"北京",
-                            #席别
-                            "seats":["二等座",],
-                            #出发时间段
-                            "start_time_limit":[8,24],
-                            #到达时间段
-                            "arrive_time_limit":[18,22],
-                        }
-    finder=FIND_TICKET(query)
-    res=finder()
-    for ticket in res:
-        print(ticket)
-
-        print("出发时间：",ticket[8])
-        print("到达时间：",ticket[9])
+    pass
+    # query={
+    #                         #乘车日期
+    #                         "train_date":["2019-10-25",],
+    #                         #始发站2
+    #                         "from_station":"杭州",
+    #                         #到达站
+    #                         "to_station":"北京",
+    #                         #席别
+    #                         "seats":["二等座",],
+    #                         #出发时间段
+    #                         "start_time_limit":[8,24],
+    #                         #到达时间段
+    #                         "arrive_time_limit":[18,22],
+    #                     }
+    # finder=FIND_TICKET(query)
+    # res=finder()
+    # for ticket in res:
+    #     print(ticket)
+    #
+    #     print("出发时间：",ticket[8])
+    #     print("到达时间：",ticket[9])
 
 
 """

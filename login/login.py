@@ -38,6 +38,7 @@ class LOGIN_12306(object):
         try:
             print("正在登陆")
             self.identify_image()
+            time.sleep(3)
             self.driver.find_element_by_css_selector(".login-item>input").send_keys(self.user_name, Keys.TAB, self.password)
             login_buttun=self.driver.find_element_by_css_selector("#J-login")
             login_buttun.click()

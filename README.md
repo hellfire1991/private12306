@@ -3,9 +3,9 @@
 
 安装：
 
-  1.命令：git clone git@github.com:hellfire1991/pravite12306.git
+  1.命令：git clone git@github.com:hellfire1991/private12306.git
   
-  2.进入项目目录：pravite12306
+  2.进入项目目录：private12306
   
   3.命令：pip install virtualenv
   
@@ -15,7 +15,7 @@
   
     windows 进入 env/Script 文件夹后 命令 ：source activate        激活虚拟环境
 
-  6.返回 private目录
+  6.返回 private12306目录
 
   7.命令：pip install -r requirements.txt
 

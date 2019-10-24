@@ -99,7 +99,7 @@ class LOGIN_12306(object):
 
 if __name__ =="__main__":
     pass
-    # USER_DATA = [{"user_name": "zhangsan", "password": "lisi"},
+    # USER_DATA = [{"user_name": "hellfire1991", "password": "xxxxxxxx"},
     #              ]
     #
     # QUERY_DATA = {"hellfire1991": {

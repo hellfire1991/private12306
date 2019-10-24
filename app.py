@@ -2,6 +2,7 @@ from look_for_ticket.find_ticket import FIND_TICKET
 from buy_ticket.buy_ticket import BUY_TICKET
 from extension.log import log_input
 from extension.check_before_start import CHECKER
+from extension.clock import CLOCK
 import threading
 import time
 import random
@@ -9,14 +10,17 @@ import random
 #启动前检查用户输入参数是否正确
 
 class APP(object):
-    
+    #程序启动前的参数检查器
     checker=CHECKER
-    #app启前需要用的参数检查器
+    #程序休眠闹钟
+    clock=CLOCK
+    # 全局变量储存栈
     local_stack=threading.local()
-    #用于不同线程数据储存
     def __init__(self,users,querys):
         self.users=users
         self.query=querys
+        self.finder=None
+        self.buyer=None
 
     def get_mission(self):
         #获取符合要求的任务（票据信息）
@@ -24,6 +28,7 @@ class APP(object):
         self.finder = FIND_TICKET(query)
         time.sleep(1)
         while not APP.local_stack.mission:
+            APP.clock()
             log_input(APP.local_stack.user["user_name"],"获取任务，开始查询")
             missions = self.finder()
             if missions:
@@ -76,7 +81,7 @@ class APP(object):
 
     @classmethod
     def start(cls,users,querys):
-        CHECKER.check_before_start(users,querys)
+        APP.checker.check_before_start(users,querys)
         APP.users=users
         APP.querys=querys
         if len(users)==1:

@@ -4,7 +4,7 @@ import random
 
 
 #设置静态文件路径
-BASE_PATH=path.dirname(path.dirname(path.abspath(__file__))) + '/my12306/'
+BASE_PATH=path.dirname(path.dirname(path.abspath(__file__))) + '/private12306/'
 PATH={
     "stations_path":BASE_PATH+"necessary_data/station.txt",
     "log_path":BASE_PATH+"log/",

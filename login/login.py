@@ -15,8 +15,9 @@ class LOGIN_12306(object):
         #初始化浏览器，指向账号密码登陆页面
 
         chrome_options = Options()
-        prefs = {"profile.managed_default_content_settings.images": 2}
-        chrome_options.add_experimental_option("prefs", prefs)
+        #浏览器不加载图片
+        # prefs = {"profile.managed_default_content_settings.images": 2}
+        # chrome_options.add_experimental_option("prefs", prefs)
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--disable-dev-shm-usage')
 

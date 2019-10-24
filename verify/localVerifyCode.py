@@ -8,7 +8,6 @@ import tensorflow as tf
 from verify import pretreatment
 from verify.mlearn_for_image import preprocess_input
 
-
 graph = tf.get_default_graph()
 
 PATH = lambda p: os.path.abspath(

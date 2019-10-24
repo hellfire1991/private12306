@@ -3,10 +3,10 @@ from app import APP
 
 #用户账号密码（字典）
 #多用户时，使用列表内嵌套用户信息字典表示
-USER_DATA=[{"user_name":"hello","password":"xxxxxxxx"},]
+USER_DATA=[{"user_name":"hellfire1991","password":"fyj123698745"},]
 
 #填写车票信息要注意严格按照模板填写，不然可能出现无法预测的bug
-QUERY_DATA={"hello":{
+QUERY_DATA={"hellfire1991":{
                             #乘车日期(必填)
                             "train_date":["2019-10-23",],
 

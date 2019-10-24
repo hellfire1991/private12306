@@ -9,9 +9,11 @@ import random
 #启动前检查用户输入参数是否正确
 
 class APP(object):
-    #全局变量储存栈
+    
     checker=CHECKER
+    #app启前需要用的参数检查器
     local_stack=threading.local()
+    #用于不同线程数据储存
     def __init__(self,users,querys):
         self.users=users
         self.query=querys
@@ -32,9 +34,14 @@ class APP(object):
                 log_input(APP.local_stack.user["user_name"],"完成一次查询，未发现符合要求的车票")
                 time.sleep(random.randrange(5, 10))
 
+
     def execute_mission(self):
+        #当查询器获取符合任务需求的票据信息时，进行买票操作
         mission=APP.local_stack.mission.pop()
-        res =self.buyer.buy_ticket(mission)
+        try:
+            res =self.buyer.buy_ticket(mission)
+        except:
+            res="re_login"
         return res
 
     @classmethod
@@ -60,15 +67,18 @@ class APP(object):
             if res == "succeeded":
                 log_input(APP.local_stack.user["user_name"],"买票成功，请在30分钟内进入12306app付款")
                 break
+            elif res=="re_login":
+                app.buyer=BUY_TICKET(user,query)
+                APP.local_stack.mission = []
             else:
                 pass
+        log_input(APP.local_stack.user["user_name"],"任务结束，退出线程")
 
     @classmethod
     def start(cls,users,querys):
         CHECKER.check_before_start(users,querys)
         APP.users=users
         APP.querys=querys
-        thread_list=[]
         if len(users)==1:
             user = users[0]
             query=querys.get(user['user_name'])
@@ -78,6 +88,7 @@ class APP(object):
             cls.start_mission(user,query)
             return  None
         else:
+            thread_list=[]
             for user in APP.users:
                 log_input(user["user_name"], "*"*120)
                 log_input(user["user_name"], "程序启动")

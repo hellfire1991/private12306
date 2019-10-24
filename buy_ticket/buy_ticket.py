@@ -8,6 +8,9 @@ class BUY_TICKET(object):
         self.query=query
         #获取登陆完毕的浏览器
         self.driver=LOGIN_12306(self.user).__call__()
+        self.prepare_to_buy()
+
+    def prepare_to_buy(self):
         #进入查询页面
         self.driver.get('https://kyfw.12306.cn/otn/leftTicket/init?linktypeid=dc')
         time.sleep(3)
@@ -33,25 +36,6 @@ class BUY_TICKET(object):
         javascript_message="var e=document.getElementById('toStation').value=" +"'"+ to_station_key+"'"
         self.driver.execute_script(javascript_message)
 
-
-    def re_init(self):
-        self.driver=LOGIN_12306(self.user).__call__()
-        self.driver.get('https://kyfw.12306.cn/otn/leftTicket/init?linktypeid=dc')
-        time.sleep(3)
-        # 填写出发站点
-        self.driver.find_element_by_css_selector("#fromStationText").click()
-        time.sleep(0.5)
-        self.driver.find_element_by_css_selector("#fromStationText").send_keys(self.query.get("from_station"))
-        time.sleep(0.5)
-        self.driver.find_element_by_css_selector("#citem_0").click()
-        time.sleep(0.5)
-        # 填写到达站点
-        self.driver.find_element_by_css_selector("#toStationText").click()
-        time.sleep(0.5)
-        self.driver.find_element_by_css_selector("#toStationText").send_keys(self.query.get("to_station"))
-        time.sleep(0.5)
-        self.driver.find_element_by_css_selector("#citem_0").click()
-        print("买票模块准备完毕")
 
     def choose_seat(self,mission):
         #提交订单前选座位
@@ -88,12 +72,14 @@ class BUY_TICKET(object):
         self.driver.find_element_by_css_selector("#submitOrder_id").click()
         time.sleep(2)
         # 确认订单
-        # self.driver.find_element_by_css_selector("#confirmDiv .btn92s").click()
+        self.driver.find_element_by_css_selector("#confirmDiv .btn92s").click()
 
         return "succeeded"
 
     def __call__(self, *args, **kwargs):
         pass
+
+
 
 
 

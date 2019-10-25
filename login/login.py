@@ -18,13 +18,14 @@ class LOGIN_12306(object):
         #浏览器不加载图片
         # prefs = {"profile.managed_default_content_settings.images": 2}
         # chrome_options.add_experimental_option("prefs", prefs)
+        chrome_options.add_experimental_option('excludeSwitches', ['enable-automation'])
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--disable-dev-shm-usage')
 
         # chrome_options.add_argument('--headless')
-        self.driver = webdriver.Chrome(chrome_options=chrome_options)
+        self.driver = webdriver.Chrome(options=chrome_options)
         #浏览器进入首页，获取必要的cookies
-        self.driver.get("https://www.12306.cn/index/index.html")
+        self.driver.get("https://www.12306.cn")
         time.sleep(8)
         login_entrence = self.driver.find_element_by_css_selector("#J-header-login>a")
         login_entrence.click()
@@ -50,6 +51,8 @@ class LOGIN_12306(object):
         return self.driver.current_url
 
     def relogin(self):
+        self.driver.find_element_by_css_selector(".lgcode-refresh").click()
+        time.sleep(1)
         try:
             print("正在登陆")
             self.identify_image()
@@ -68,7 +71,6 @@ class LOGIN_12306(object):
         image = self.driver.find_element_by_css_selector("#J-loginImg")
         src = image.get_attribute('src')
         img = src[22:]
-        print(src)
         img_identify_result=Verify().verify(img)
         #判断是否识别并获取结果
         self.driver.maximize_window()

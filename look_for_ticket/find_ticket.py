@@ -38,7 +38,7 @@ class FIND_TICKET(object):
                 try:
                     res=self.query_by_date()
                 except:
-                    raise ("查询失败，12306查询链接可能已经失效，请联系作者")
+                    raise Exception("查询失败，12306查询链接可能已经失效，请联系作者")
                 return res
         return res
 
@@ -72,7 +72,7 @@ class FIND_TICKET(object):
         if self.tickets_info_time_limited:
             pass
         else:
-            raise ValueError("不存在车次符合您填写的发车/到达时间，请重新填写，或者查看12306官网后，选择合适的发车/到达时间")
+            raise Exception("不存在车次符合您填写的发车/到达时间，请重新填写，或者查看12306官网后，选择合适的发车/到达时间")
         for ticket_info in self.tickets_info_time_limited:
             seats_needed = self.seats
             seats_index = self.get_seat_index(seats_needed)

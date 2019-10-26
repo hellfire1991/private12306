@@ -46,7 +46,7 @@ class LOGIN_12306(object):
             login_buttun.click()
             time.sleep(5)
         except:
-            raise
+            raise Exception("登陆失败")
         #返回点击登陆后的url，如果登陆失败则无法进入正确的页面，检验登陆是否成功
         return self.driver.current_url
 
@@ -60,7 +60,7 @@ class LOGIN_12306(object):
             login_buttun.click()
             time.sleep(5)
         except:
-            raise
+            raise Exception("登陆失败")
         #返回点击登陆后的url，如果登陆失败则无法进入正确的页面,用来检验登陆是否成功
         return self.driver.current_url
 

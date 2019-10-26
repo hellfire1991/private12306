@@ -59,7 +59,7 @@ class APP(object):
         try:
             app.buyer=BUY_TICKET(user,query)
         except:
-            raise EOFError("用户登陆失败，请检查账号密码是否正确")
+            raise Exception("用户登陆失败，请检查账号密码是否正确")
         log_input(APP.local_stack.user["user_name"], "登陆成功，买手就位")
         APP.local_stack.mission = []
         while True:
@@ -67,7 +67,7 @@ class APP(object):
                 app.get_mission()
             except:
                 log_input(APP.local_stack.user["user_name"], "查询失败")
-                raise
+                raise Exception("查询失败")
             log_input(APP.local_stack.user["user_name"],"开始买票")
             res = app.execute_mission()
             if res == "succeeded":

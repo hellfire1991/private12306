@@ -26,11 +26,11 @@ class CHECKER():
     def check_user(cls,user):
         user_name=user["user_name"]
         if not user_name:
-            raise ("请输入12306用户名")
+            raise Exception("请输入12306用户名")
 
         password=user["password"]
         if not password:
-            raise ("请输入12306登陆密码")
+            raise Exception("请输入12306登陆密码")
 
     @classmethod
     def check_query(cls,query):
@@ -41,7 +41,7 @@ class CHECKER():
             for date in train_dates:
                 result=re.match(pattern1,date)
                 if not result:
-                    raise ("乘车日期格式填写错误")
+                    raise Exception("乘车日期格式填写错误")
         # 2019-10-20
         for train_date in train_dates:
             year,month,date=int(train_date[0:4]),int(train_date[5:7]),int(train_date[8:10])
@@ -56,11 +56,11 @@ class CHECKER():
                     if date>date_local or date==date_local:
                         pass
                     else:
-                        raise ValueError("日期填写错误，车票日期应当大于或者等于当前日期")
+                        raise Exception("日期填写错误，车票日期应当大于或者等于当前日期")
                 else:
-                    raise ValueError("日期填写错误，车票日期应当大于或者等于当前日期")
+                    raise Exception("日期填写错误，车票日期应当大于或者等于当前日期")
             else:
-                raise ValueError("日期填写错误，车票日期应当大于或者等于当前日期")
+                raise Exception("日期填写错误，车票日期应当大于或者等于当前日期")
 
         #检查车站
         with open(stations_path,"r",encoding="utf-8") as f:
@@ -69,13 +69,13 @@ class CHECKER():
             pattern2="\\|"+from_station+"\\|"
             result=re.search(pattern2,stations_txt)
             if not result:
-                raise ValueError("您填写的始发站不存在，请重新输入")
+                raise Exception("您填写的始发站不存在，请重新输入")
 
             to_station = query.get("to_station")
             pattern3 = "\\|"+to_station+"\\|"
             result = re.search(pattern3, stations_txt)
             if not result:
-                raise ValueError("您填写的到达站不存在，请重新输入")
+                raise Exception("您填写的到达站不存在，请重新输入")
 
         #检查席别
         seat_type="|软卧|特等座|无座|硬卧|硬座|二等座|一等座|商务座|"
@@ -84,13 +84,13 @@ class CHECKER():
             pattern4="\\|"+seat+"\\|"
             res=re.search(pattern4,seat_type)
             if not res:
-                raise ValueError("您选择的席别不存在，请重新输入")
+                raise Exception("您选择的席别不存在，请重新输入")
 
         #检查出发时间，到达时间
         if query.get("start_time_limit"):
             start_time=query.get("start_time_limit")
             if start_time[0] < 0 or start_time[1] > 24:
-                raise ValueError("出发时间段应该限制在0-24之间")
+                raise Exception("出发时间段应该限制在0-24之间")
         if  query.get("arrive_time_limit"):
             arrive_time=query.get("arrive_time_limit")
             if arrive_time[0]<0 or arrive_time[1]>24:

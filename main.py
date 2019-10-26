@@ -8,7 +8,7 @@ USER_DATA=[{"user_name":"hellfire1991","password":"xxxxxxx"},]
 #填写车票信息要注意严格按照模板填写，不然可能出现无法预测的bug
 QUERY_DATA={"hellfire1991":{
                             #乘车日期(必填)
-                            "train_date":["2019-11-20",],
+                            "train_date":["2019-10-30",],
 
                             #始发站2（必填）
                             "from_station":"杭州",
@@ -16,8 +16,8 @@ QUERY_DATA={"hellfire1991":{
                             #到达站（必填）
                             "to_station":"北京",
 
-                            #席别（土豪选填，不填就会有票就买，可能买到商务座，站票）
-                            "seats":["硬座",],
+                            #必填，可多选
+                            "seats":["二等座",],
 
                             #出发时间段（选填，可能半夜发车）
                             "start_time_limit":[0,24],

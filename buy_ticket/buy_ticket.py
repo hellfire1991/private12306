@@ -36,15 +36,16 @@ class BUY_TICKET(object):
         javascript_message="var e=document.getElementById('toStation').value=" +"'"+ to_station_key+"'"
         self.driver.execute_script(javascript_message)
 
-
     def choose_seat(self,mission):
         #提交订单前选座位
-        self.driver.find_element_by_css_selector("#ticketInfo_id").click()
+        self.driver.find_element_by_css_selector("#seatType_1").click()
+        time.sleep(3)
         seat_type=mission[-1]
-        seat_type_prepared=seat_type[0:1]
-        seat_types=self.driver.find_elements_by_css_selector("#ticketInfo_id>option")
+        seat_type_prepared=seat_type[0:2]
+        seat_types=self.driver.find_elements_by_css_selector("#seatType_1 option")
         for seat_type in seat_types:
-            if seat_type.text[0:1]==seat_type_prepared:
+            seat_type_text=seat_type.text.lstrip()
+            if seat_type_text[0:2]==seat_type_prepared:
                 seat_type.click()
                 break
 
@@ -56,29 +57,22 @@ class BUY_TICKET(object):
         # today_mday=time.localtime().tm_mday
         # ticket_date_mday=int(mission_date[6:])
         # selector_date="#date_range>ul li:nth-child"+"("+str(ticket_date_mday-today_mday+1)+")"
-        #选择日期
+        # 选择日期
         # self.driver.find_element_by_css_selector(selector_date).click()
         #点击日历图标，弹出日期选择
         self.driver.find_element_by_css_selector("#date_icon_1").click()
+        time.sleep(1)
         ticket_mon = mission_date[4:6]
         today_mon = str(time.localtime().tm_mon)
-        print("票据月份：",ticket_mon)
         ticket_date = mission_date[6:]
-        print("票据日期：",ticket_date)
         #根据传入的任务日期查询当日车票信息
         if ticket_mon==today_mon:
-            print("true")
             date_seclector = ".cal>.cal-cm div:nth-child(" + ticket_date + ")"
-            print("日期选择器：",date_seclector)
             date=self.driver.find_element_by_css_selector(date_seclector).click()
-            print(date)
         else:
-            print("false")
 
             date_seclector = ".cal-right>.cal-cm div:nth-child(" + ticket_date + ")"
-            print("日期选择器：", date_seclector)
             date=self.driver.find_element_by_css_selector(date_seclector).click()
-            print(date)
         self.driver.find_element_by_css_selector("#query_ticket").click()
         time.sleep(0.5)
         #车票预定选择器
@@ -90,7 +84,8 @@ class BUY_TICKET(object):
         # 选择乘车人
         self.driver.find_element_by_css_selector("#normal_passenger_id>li>input").click()
         time.sleep(0.5)
-        self.choose_seat(mission)
+        #选择席别
+        self.choose_seat(self.mission)
         self.driver.find_element_by_css_selector("#submitOrder_id").click()
         time.sleep(2)
         # 确认订单

@@ -3,7 +3,7 @@ from app import APP
 
 #用户账号密码（字典）
 #多用户时，使用列表内嵌套用户信息字典表示
-USER_DATA=[{"user_name":"hellfire1991","password":"xxxxxxxx"},]
+USER_DATA=[{"user_name":"hellfire1991","password":"xxxxxxx"},]
 
 #填写车票信息要注意严格按照模板填写，不然可能出现无法预测的bug
 QUERY_DATA={"hellfire1991":{
@@ -17,7 +17,7 @@ QUERY_DATA={"hellfire1991":{
                             "to_station":"北京",
 
                             #席别（土豪选填，不填就会有票就买，可能买到商务座，站票）
-                            "seats":["二等座",],
+                            "seats":["硬座",],
 
                             #出发时间段（选填，可能半夜发车）
                             "start_time_limit":[0,24],

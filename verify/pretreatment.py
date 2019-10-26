@@ -7,7 +7,6 @@
 import hashlib
 import os
 import pathlib
-
 import cv2
 import numpy as np
 import requests
@@ -15,7 +14,6 @@ import scipy.fftpack
 
 
 PATH = 'imgs'
-
 
 def download_image():
     # 抓取验证码

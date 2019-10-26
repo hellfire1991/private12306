@@ -53,11 +53,33 @@ class BUY_TICKET(object):
         self.mission=mission
         mission_date=mission[13]
         #生成网页车次日期选择器
-        today_mday=time.localtime().tm_mday
-        ticket_date_mday=int(mission_date[6:])
-        selector_date="#date_range>ul li:nth-child"+"("+str(ticket_date_mday-today_mday+1)+")"
-        #选择日趋
-        self.driver.find_element_by_css_selector(selector_date).click()
+        # today_mday=time.localtime().tm_mday
+        # ticket_date_mday=int(mission_date[6:])
+        # selector_date="#date_range>ul li:nth-child"+"("+str(ticket_date_mday-today_mday+1)+")"
+        #选择日期
+        # self.driver.find_element_by_css_selector(selector_date).click()
+        #点击日历图标，弹出日期选择
+        self.driver.find_element_by_css_selector("#date_icon_1").click()
+        ticket_mon = mission_date[4:6]
+        today_mon = str(time.localtime().tm_mon)
+        print("票据月份：",ticket_mon)
+        ticket_date = mission_date[6:]
+        print("票据日期：",ticket_date)
+        #根据传入的任务日期查询当日车票信息
+        if ticket_mon==today_mon:
+            print("true")
+            date_seclector = ".cal>.cal-cm div:nth-child(" + ticket_date + ")"
+            print("日期选择器：",date_seclector)
+            date=self.driver.find_element_by_css_selector(date_seclector).click()
+            print(date)
+        else:
+            print("false")
+
+            date_seclector = ".cal-right>.cal-cm div:nth-child(" + ticket_date + ")"
+            print("日期选择器：", date_seclector)
+            date=self.driver.find_element_by_css_selector(date_seclector).click()
+            print(date)
+        self.driver.find_element_by_css_selector("#query_ticket").click()
         time.sleep(0.5)
         #车票预定选择器
         book_id="#ticket_"+self.mission[2]
@@ -73,7 +95,7 @@ class BUY_TICKET(object):
         time.sleep(2)
         # 确认订单
         self.driver.find_element_by_css_selector("#confirmDiv .btn92s").click()
-
+        time.sleep(5)
         return "succeeded"
 
     def __call__(self, *args, **kwargs):
@@ -84,5 +106,24 @@ class BUY_TICKET(object):
 
 
 if __name__=="__main__":
-    buyer=BUY_TICKET()
-    buyer.buy_ticket()
+    user={"user_name":"hellfire1991","password":"xxxxxxxx"}
+    query={
+                            #乘车日期(必填)
+                            "train_date":["2019-10-28",],
+
+                            #始发站2（必填）
+                            "from_station":"杭州",
+
+                            #到达站（必填）
+                            "to_station":"北京",
+
+                            #席别（土豪选填，不填就会有票就买，可能买到商务座，站票）
+                            "seats":["二等座",],
+
+                            #出发时间段（选填，可能半夜发车）
+                            "start_time_limit":[0,24],
+
+                            #到达时间段（选填）
+                            "arrive_time_limit":[0,24],
+                        }
+    buyer=BUY_TICKET(user,query)

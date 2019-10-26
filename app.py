@@ -46,6 +46,7 @@ class APP(object):
         try:
             res =self.buyer.buy_ticket(mission)
         except:
+            self.buyer.driver.close()
             res="re_login"
         return res
 

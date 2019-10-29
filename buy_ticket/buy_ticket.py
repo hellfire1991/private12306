@@ -74,7 +74,7 @@ class BUY_TICKET(object):
             date_seclector = ".cal-right>.cal-cm div:nth-child(" + ticket_date + ")"
             date=self.driver.find_element_by_css_selector(date_seclector).click()
         self.driver.find_element_by_css_selector("#query_ticket").click()
-        time.sleep(0.5)
+        time.sleep(1.5)
         #车票预定选择器
         book_id="#ticket_"+self.mission[2]
         selector_book=book_id+">.no-br>.btn72"
@@ -93,6 +93,10 @@ class BUY_TICKET(object):
         time.sleep(5)
         return "succeeded"
 
+    def set_chrome_to_download_img(self):
+        message='window.open("chrome://settings/content/images");'
+        self.driver.execute_script(message)
+
     def __call__(self, *args, **kwargs):
         pass
 
@@ -104,7 +108,7 @@ if __name__=="__main__":
     user={"user_name":"hellfire1991","password":"xxxxxxxx"}
     query={
                             #乘车日期(必填)
-                            "train_date":["2019-10-28",],
+                            "train_date":["2019-11-20",],
 
                             #始发站2（必填）
                             "from_station":"杭州",

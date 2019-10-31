@@ -47,7 +47,7 @@ class APP(object):
             res =self.buyer.buy_ticket(mission)
         except:
             self.buyer.driver.close()
-            res="re_login"
+            raise Exception("买票失败，未知错误，请联系作者")
         return res
 
     @classmethod
@@ -55,12 +55,12 @@ class APP(object):
         app=cls(user,query)
         APP.local_stack.user=user
         APP.local_stack.query=query
-        log_input(APP.local_stack.user["user_name"], "开始登陆")
+        log_input(APP.local_stack.user["user_name"], "初始化浏览器")
         try:
             app.buyer=BUY_TICKET(user,query)
         except:
-            raise Exception("用户登陆失败，请检查账号密码是否正确")
-        log_input(APP.local_stack.user["user_name"], "登陆成功，买手就位")
+            raise Exception("浏览器初始化失败")
+        log_input(APP.local_stack.user["user_name"], "浏览器初始化成功，买手就位")
         APP.local_stack.mission = []
         while True:
             try:
@@ -72,13 +72,19 @@ class APP(object):
             res = app.execute_mission()
             if res == "succeeded":
                 log_input(APP.local_stack.user["user_name"],"买票成功，请在30分钟内进入12306app付款")
+                log_input(APP.local_stack.user["user_name"], "任务结束，退出线程")
                 break
-            elif res=="re_login":
-                app.buyer=BUY_TICKET(user,query)
-                APP.local_stack.mission = []
             else:
-                pass
-        log_input(APP.local_stack.user["user_name"],"任务结束，退出线程")
+                app.buyer.driver.close()
+                log_input(APP.local_stack.user["user_name"],"买票失败，再次尝试买票")
+                log_input(APP.local_stack.user["user_name"], "重启浏览器")
+                try:
+                    app.buyer = BUY_TICKET(user, query)
+                except:
+                    raise Exception("浏览器初始化失败")
+                log_input(APP.local_stack.user["user_name"], "浏览器初始化成功，买手就位")
+                APP.local_stack.mission = []
+
 
     @classmethod
     def start(cls,users,querys):

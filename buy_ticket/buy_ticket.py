@@ -1,17 +1,43 @@
-from login.login import LOGIN_12306
 from look_for_ticket.station import Station
 import time
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from verify.localVerifyCode import Verify
 
 class BUY_TICKET(object):
     def __init__(self,user,query):
         self.user=user
         self.query=query
         #获取登陆完毕的浏览器
-        self.driver=LOGIN_12306(self.user).__call__()
+        self.driver=self.init_driver()
         self.prepare_to_buy()
 
+    def init_driver(self):
+        """
+        初始化浏览器
+        :return:
+        """
+        chrome_options = Options()
+        #浏览器不加载图片
+        prefs = {"profile.managed_default_content_settings.images": 2}
+        chrome_options.add_experimental_option("prefs", prefs)
+        chrome_options.add_experimental_option('excludeSwitches', ['enable-automation'])
+        chrome_options.add_argument('--no-sandbox')
+        # chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--disable-dev-shm-usage')
+        driver = webdriver.Chrome(options=chrome_options)
+        return driver
+
     def prepare_to_buy(self):
-        #进入查询页面
+        """
+        进入查询页面等待查询完毕
+        :return:
+        """
         self.driver.get('https://kyfw.12306.cn/otn/leftTicket/init?linktypeid=dc')
         time.sleep(3)
         # 填写出发站点,假点击，越过输入框无数据不能提交
@@ -36,11 +62,64 @@ class BUY_TICKET(object):
         javascript_message="var e=document.getElementById('toStation').value=" +"'"+ to_station_key+"'"
         self.driver.execute_script(javascript_message)
 
-    def choose_seat(self,mission):
+    def login(self):
+        """
+        登陆验证
+        :return:
+        """
+        #选择使用账号密码登陆
+        self.driver.find_element_by_css_selector(".login-hd-account").click()
+        #等待验证码加载
+        time.sleep(1)
+        #验证登陆
+        try:
+            print("正在登陆")
+            self.identify_image()
+        except:
+            pass
+        finally:
+            self.driver.find_element_by_css_selector("#J-userName").send_keys(self.user["user_name"], Keys.TAB, self.user["password"])
+            self.driver.find_element_by_css_selector("#J-login").click()
+        #等待页面跳转
+        try:
+            WebDriverWait(self.driver,4).until(EC.presence_of_element_located((By.CSS_SELECTOR,"#submitOrder_id")))
+        except:
+            self.login()
+        finally:
+            #等待js数据加载
+            time.sleep(0.5)
+        #返回点击登陆后的url，如果登陆失败则无法进入正确的页面，检验登陆是否成功
+        return True
+
+    def identify_image(self):
+        """
+        识别验证码，并在浏览器上点击识别坐标
+        :return:
+        """
+        image = self.driver.find_element_by_css_selector("#J-loginImg")
+        src = image.get_attribute('src')
+        img = src[22:]
+        img_identify_result=Verify().verify(img)
+        #判断是否识别并获取结果
+        self.driver.maximize_window()
+        if not img_identify_result:
+            print('打码失败')
+            return None
+        #根据验证码识别结果列表，分别在识别的点上打码（点击正确位置）
+        while img_identify_result:
+            local_x=img_identify_result[0]
+            local_y=img_identify_result[1]
+            #将打过的点在结果列表中去掉
+            img_identify_result=img_identify_result[2:]
+            #调用浏览器点击给定坐标的位置
+            ActionChains(self.driver).move_to_element_with_offset(image, local_x, local_y).click().perform()
+        return None
+
+    def choose_seat(self):
         #提交订单前选座位
         self.driver.find_element_by_css_selector("#seatType_1").click()
-        time.sleep(3)
-        seat_type=mission[-1]
+        time.sleep(0.5)
+        seat_type=self.mission[-1]
         seat_type_prepared=seat_type[0:2]
         seat_types=self.driver.find_elements_by_css_selector("#seatType_1 option")
         for seat_type in seat_types:
@@ -48,17 +127,8 @@ class BUY_TICKET(object):
             if seat_type_text[0:2]==seat_type_prepared:
                 seat_type.click()
                 break
-
-
-    def buy_ticket(self,mission):
-        self.mission=mission
-        mission_date=mission[13]
-        #生成网页车次日期选择器
-        # today_mday=time.localtime().tm_mday
-        # ticket_date_mday=int(mission_date[6:])
-        # selector_date="#date_range>ul li:nth-child"+"("+str(ticket_date_mday-today_mday+1)+")"
-        # 选择日期
-        # self.driver.find_element_by_css_selector(selector_date).click()
+    def choose_and_book(self):
+        mission_date=self.mission[13]
         #点击日历图标，弹出日期选择
         self.driver.find_element_by_css_selector("#date_icon_1").click()
         time.sleep(1)
@@ -70,32 +140,44 @@ class BUY_TICKET(object):
             date_seclector = ".cal>.cal-cm div:nth-child(" + ticket_date + ")"
             date=self.driver.find_element_by_css_selector(date_seclector).click()
         else:
-
             date_seclector = ".cal-right>.cal-cm div:nth-child(" + ticket_date + ")"
             date=self.driver.find_element_by_css_selector(date_seclector).click()
         self.driver.find_element_by_css_selector("#query_ticket").click()
-        time.sleep(1.5)
-        #车票预定选择器
-        book_id="#ticket_"+self.mission[2]
-        selector_book=book_id+">.no-br>.btn72"
-        # 选择车票
-        self.driver.find_element_by_css_selector(selector_book).click()
-        time.sleep(2)
+        book_id = "#ticket_" + self.mission[2]
+        selector_book = book_id + ">.no-br>.btn72"
+        try:
+            WebDriverWait(self.driver, 4).until(EC.presence_of_element_located((By.CSS_SELECTOR, selector_book)))
+        finally:
+            time.sleep(1)
+            self.driver.find_element_by_css_selector(selector_book).click()
+        try:
+            WebDriverWait(self.driver, 4).until(EC.presence_of_element_located((By.CSS_SELECTOR,".login-hd-account")))
+        finally:
+            time.sleep(1)
+            return True
+
+    def buy_ticket(self,mission):
+        self.mission=mission
+        #选择日期点击预定车票
+        self.choose_and_book()
+        #登陆验证
+        self.login()
         # 选择乘车人
         self.driver.find_element_by_css_selector("#normal_passenger_id>li>input").click()
         time.sleep(0.5)
         #选择席别
-        self.choose_seat(self.mission)
+        self.choose_seat()
+        #提交订单
         self.driver.find_element_by_css_selector("#submitOrder_id").click()
-        time.sleep(2)
-        # 确认订单
-        self.driver.find_element_by_css_selector("#confirmDiv .btn92s").click()
-        time.sleep(5)
-        return "succeeded"
-
-    def set_chrome_to_download_img(self):
-        message='window.open("chrome://settings/content/images");'
-        self.driver.execute_script(message)
+        try:
+            WebDriverWait(self.driver,4).until(EC.presence_of_element_located((By.CSS_SELECTOR,"#confirmDiv")))
+        finally:
+            time.sleep(0.5)
+            # self.driver.find_element_by_css_selector("#confirmDiv .btn92s").click()
+        # try:
+        #     WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, ".i-lock")))
+        # finally:
+            return "succeeded"
 
     def __call__(self, *args, **kwargs):
         pass

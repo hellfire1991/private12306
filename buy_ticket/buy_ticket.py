@@ -46,7 +46,6 @@ class BUY_TICKET(object):
         self.driver.find_element_by_css_selector("#citem_0").click()
         #为提交form 填写value,真数据
         from_station_key=Station.get_station_key_by_name(self.query.get("from_station"))
-        print(from_station_key)
         javascript_message="var e=document.getElementById('fromStation').value="+"'"+from_station_key+"'"
         self.driver.execute_script(javascript_message)
 
@@ -58,7 +57,6 @@ class BUY_TICKET(object):
 
         # 为提交form 填写value,真数据
         to_station_key = Station.get_station_key_by_name(self.query.get("to_station"))
-        print(to_station_key)
         javascript_message="var e=document.getElementById('toStation').value=" +"'"+ to_station_key+"'"
         self.driver.execute_script(javascript_message)
 
@@ -73,7 +71,6 @@ class BUY_TICKET(object):
         time.sleep(1)
         #验证登陆
         try:
-            print("正在登陆")
             self.identify_image()
         except:
             pass
@@ -103,7 +100,6 @@ class BUY_TICKET(object):
         #判断是否识别并获取结果
         self.driver.maximize_window()
         if not img_identify_result:
-            print('打码失败')
             return None
         #根据验证码识别结果列表，分别在识别的点上打码（点击正确位置）
         while img_identify_result:

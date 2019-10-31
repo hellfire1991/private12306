@@ -21,7 +21,7 @@ class CLOCK(object):
 
     @classmethod
     def set_clock(cls,user):
-        log_input(user,"23-6点12306网站停止订票,程序休眠")
+        log_input(user,"程序暂停：23-6点12306网站停止订票,程序休眠")
         log_input(user,"****************************************\n"
                   "*******                        *********\n"
                   "*******         程序休眠中       *********\n"

@@ -10,7 +10,7 @@ def log_input(user_name,text):
         f.write(time.ctime())
         f.write("\n")
         f.write(text)
-        f.write("\n")
+        f.write("\n\n")
         f.flush()
         f.close()
 

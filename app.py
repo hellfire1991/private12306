@@ -13,7 +13,7 @@ class APP(object):
     #程序启动前的参数检查器
     checker=CHECKER
     #程序休眠闹钟
-    clock=CLOCK
+    myclock=CLOCK
     # 全局变量储存栈
     local_stack=threading.local()
     def __init__(self,users,querys):
@@ -28,8 +28,9 @@ class APP(object):
         self.finder = FIND_TICKET(query)
         time.sleep(1)
         while not APP.local_stack.mission:
-            APP.clock()
             log_input(APP.local_stack.user["user_name"],"获取任务，开始查询")
+            #查询前检查时间
+            APP.myclock.check_clock(APP.local_stack.user["user_name"])
             missions = self.finder()
             if missions:
                 for mission in missions:
@@ -44,6 +45,7 @@ class APP(object):
         #当查询器获取符合任务需求的票据信息时，进行买票操作
         mission=APP.local_stack.mission.pop()
         try:
+            APP.myclock.check_clock(APP.local_stack.user["user_name"])
             res =self.buyer.buy_ticket(mission)
         except:
             self.buyer.driver.close()

@@ -173,10 +173,10 @@ class BUY_TICKET(object):
             WebDriverWait(self.driver,4).until(EC.presence_of_element_located((By.CSS_SELECTOR,"#confirmDiv")))
         finally:
             time.sleep(0.5)
-            # self.driver.find_element_by_css_selector("#confirmDiv .btn92s").click()
-        # try:
-        #     WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, ".i-lock")))
-        # finally:
+            self.driver.find_element_by_css_selector("#confirmDiv .btn92s").click()
+        try:
+            WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, ".i-lock")))
+        finally:
             return "succeeded"
 
     def __call__(self, *args, **kwargs):

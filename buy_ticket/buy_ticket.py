@@ -81,7 +81,33 @@ class BUY_TICKET(object):
         try:
             WebDriverWait(self.driver,4).until(EC.presence_of_element_located((By.CSS_SELECTOR,"#submitOrder_id")))
         except:
-            self.login()
+            self.re_login()
+        finally:
+            #等待js数据加载
+            time.sleep(0.5)
+        #返回点击登陆后的url，如果登陆失败则无法进入正确的页面，检验登陆是否成功
+        return True
+    def re_login(self):
+        """
+        登陆验证
+        :return:
+        """
+        #选择使用账号密码登陆
+        self.driver.find_element_by_css_selector(".login-hd-account").click()
+        #等待验证码加载
+        time.sleep(1)
+        #验证登陆
+        try:
+            self.identify_image()
+        except:
+            pass
+        finally:
+            self.driver.find_element_by_css_selector("#J-login").click()
+        #等待页面跳转
+        try:
+            WebDriverWait(self.driver,4).until(EC.presence_of_element_located((By.CSS_SELECTOR,"#submitOrder_id")))
+        except:
+            self.re_login()
         finally:
             #等待js数据加载
             time.sleep(0.5)

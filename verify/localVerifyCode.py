@@ -1,3 +1,4 @@
+
 import base64
 import os
 import cv2
@@ -89,7 +90,7 @@ class Verify:
             label = label.argmax()
             text = verify_titles[label]
             text_list.append(text)
-        # print("题目为{}".format(text_list))
+        print("题目为{}".format(text_list))
         # 加载图片分类器
         self.loadImgModel()
         with graph.as_default():
@@ -98,7 +99,7 @@ class Verify:
         results = []
         for pos, label in enumerate(labels):
             l = verify_titles[label]
-            # print(pos + 1, l)
+            print(pos + 1, l)
             if l in text_list:
                 results.append(str(pos + 1))
         post=self.codexy(Ofset=results,is_raw_input=False)

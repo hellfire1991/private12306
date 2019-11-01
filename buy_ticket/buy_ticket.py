@@ -123,6 +123,7 @@ class BUY_TICKET(object):
             if seat_type_text[0:2]==seat_type_prepared:
                 seat_type.click()
                 break
+
     def choose_and_book(self):
         mission_date=self.mission[13]
         #点击日历图标，弹出日期选择

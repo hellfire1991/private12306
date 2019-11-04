@@ -137,18 +137,31 @@ class BUY_TICKET(object):
             ActionChains(self.driver).move_to_element_with_offset(image, local_x, local_y).click().perform()
         return None
 
-    def choose_seat(self):
+    def choose_seat(self,passager_index):
         #提交订单前选座位
-        self.driver.find_element_by_css_selector("#seatType_1").click()
+        seatType="#seatType_"+str(passager_index)
+        seatType_option=seatType+" option"
+        self.driver.find_element_by_css_selector(seatType).click()
         time.sleep(0.5)
         seat_type=self.mission[-1]
         seat_type_prepared=seat_type[0:2]
-        seat_types=self.driver.find_elements_by_css_selector("#seatType_1 option")
+        seat_types=self.driver.find_elements_by_css_selector(seatType_option)
         for seat_type in seat_types:
             seat_type_text=seat_type.text.lstrip()
             if seat_type_text[0:2]==seat_type_prepared:
                 seat_type.click()
                 break
+
+    def choose_seat_for_passagers(self):
+        if not self.query.get("passagers"):
+            self.choose_seat("1")
+        elif len(self.query.get("passagers"))==1:
+            self.choose_seat("1")
+        else:
+            count_passagers=len(self.query.get("passagers"))
+            for i in range(1,count_passagers+1):
+                self.choose_seat(str(i))
+
 
     def choose_and_book(self):
         mission_date=self.mission[13]
@@ -179,6 +192,19 @@ class BUY_TICKET(object):
             time.sleep(1)
             return True
 
+    def choose_passager(self):
+        passagers=self.query.get("passagers")
+        if passagers:
+            #如果用户选择了乘车人，则遍历乘车人标签，找到被选乘车人，点击相应的input标签
+            elements=self.driver.find_elements_by_css_selector("#normal_passenger_id li")
+            for element in elements:
+                for passager in passagers:
+                    if element.text==passager:
+                        element.find_element_by_tag_name("input").click()
+        else:
+            #如果用户没选乘车人，默认选中用户自己
+            self.driver.find_element_by_css_selector("#normal_passenger_id>li>input").click()
+
     def buy_ticket(self,mission):
         self.mission=mission
         #选择日期点击预定车票
@@ -186,12 +212,13 @@ class BUY_TICKET(object):
         #登陆验证
         self.login()
         # 选择乘车人
-        self.driver.find_element_by_css_selector("#normal_passenger_id>li>input").click()
+        self.choose_passager()
         time.sleep(0.5)
         #选择席别
-        self.choose_seat()
+        self.choose_seat_for_passagers()
         #提交订单
         self.driver.find_element_by_css_selector("#submitOrder_id").click()
+
         try:
             WebDriverWait(self.driver,4).until(EC.presence_of_element_located((By.CSS_SELECTOR,"#confirmDiv")))
         finally:

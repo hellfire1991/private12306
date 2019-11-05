@@ -216,6 +216,7 @@ class BUY_TICKET(object):
         time.sleep(0.5)
         #选择席别
         self.choose_seat_for_passagers()
+        time.sleep(0.5)
         #提交订单
         self.driver.find_element_by_css_selector("#submitOrder_id").click()
 
